@@ -13,20 +13,45 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBlue,
-      appBar: AppBar(),
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.elliptical(200, 80),
-                      bottomRight: Radius.elliptical(200, 80))),
-              height: 200,
+            Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          opacity: 0.8,
+                          fit: BoxFit.cover,
+                          image: AssetImage("assets/images/login.jpeg")),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.elliptical(200, 80),
+                          bottomRight: Radius.elliptical(200, 80))),
+                  height: 200,
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  "Welcome Back",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  "Login to your account",
+                  style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
             ),
             ListView(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
               children: [
                 const SizedBox(
                   height: 350.0,
@@ -108,6 +133,15 @@ class LoginPage extends StatelessWidget {
                 ),
               ],
             ),
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 25,
+                )),
           ],
         ),
       ),
