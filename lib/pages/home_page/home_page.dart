@@ -19,7 +19,6 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: colorBlue,
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Stack(
