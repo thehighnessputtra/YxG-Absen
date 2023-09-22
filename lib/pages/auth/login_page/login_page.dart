@@ -1,8 +1,10 @@
 import 'package:absensi_online/pages/signup_page/sign_up_page.dart';
+import 'package:absensi_online/services/firebase_services.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
 import 'package:absensi_online/widgets/textformfield_widget.dart';
 import 'package:absensi_online/widgets/transition_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +13,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _controllerEmail = TextEditingController();
+    TextEditingController _controllerPassword = TextEditingController();
+
     return Scaffold(
       backgroundColor: colorBlue,
       body: SafeArea(
@@ -73,10 +78,12 @@ class LoginPage extends StatelessWidget {
                           height: 40.0,
                         ),
                         CustomTextFormField(
+                          controller: _controllerEmail,
                           usingTittle: true,
-                          tittle: "Username",
+                          tittle: "Email",
                         ),
                         CustomTextFormField(
+                          controller: _controllerPassword,
                           usingTittle: true,
                           usingHideText: true,
                           tittle: "Password",
@@ -107,7 +114,14 @@ class LoginPage extends StatelessWidget {
                         SizedBox(
                             width: double.infinity,
                             child: CustomButton1(
-                                btnName: "Login", onPress: () {})),
+                                btnName: "Login",
+                                onPress: () {
+                                  FirebaseServices(FirebaseAuth.instance)
+                                      .signInEmail(
+                                          email: _controllerEmail.text,
+                                          password: _controllerPassword.text,
+                                          context: context);
+                                })),
                         const SizedBox(
                           height: 15.0,
                         ),

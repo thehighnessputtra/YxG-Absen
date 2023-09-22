@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "258982647541",
+    "project_id": "yxg-absen",
+    "storage_bucket": "yxg-absen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258982647541:android:9161b0dc6299eede0417bc",
+        "android_client_info": {
+          "package_name": "com.example.absensi_online"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuihsGB0wL964TQRbGRCfpPqldN2qiOwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

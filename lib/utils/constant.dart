@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 const Color colorBlue = Color(0xff537FE7);
 const Color colorLightBlue = Color(0xffadd8e6);
 const Color colorDarkBlue = Color(0xff4266B9);
+const Color colorDanger = Color(0xffe52d2d);
+const Color colorSuccess = Color(0xff28a745);
 
 double clip12 = 12;
 double clip16 = 16;
