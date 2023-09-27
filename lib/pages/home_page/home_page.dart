@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
       // backgroundColor: Colors,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Stack(
@@ -170,10 +171,59 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              Divider()
+                              Divider(),
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          children: [
+                            Icon(Icons.history_outlined),
+                            const SizedBox(
+                              width: 5.0,
+                            ),
+                            Text(
+                              "Attendance History",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        ListView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          shrinkWrap: true,
+                          itemCount: 6,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Mon, 18 April 2023",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      "08:00 - 05:00 PM",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider()
+                              ],
+                            );
+                          },
+                        )
                       ],
                     ),
                   ),
