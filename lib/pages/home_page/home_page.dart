@@ -1,12 +1,16 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
+import 'dart:async';
+
 import 'package:absensi_online/services/firebase_services.dart';
+import 'package:absensi_online/test.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
 import 'package:absensi_online/widgets/custom_notification.dart';
 import 'package:absensi_online/widgets/transition_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -112,70 +116,81 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.all(20),
                           height: 250,
                           width: double.infinity,
-                          child: Column(
-                            children: [
-                              Text(
-                                "Live Atendance",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                "09:41 AM",
-                                style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xff426689)),
-                              ),
-                              Text(
-                                "Mon, 18 April 2023",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff5D5D5D)),
-                              ),
-                              Divider(),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                "Office Hours",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff5D5D5D)),
-                              ),
-                              Text(
-                                "08:00 AM - 05:00 PM",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                          child: StreamBuilder(
+                            stream: Stream.periodic(const Duration(seconds: 1)),
+                            builder: (context, snapshot) {
+                              return Column(
                                 children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3 +
-                                            10,
-                                    child: CustomButton1(
-                                        btnName: "Check In", onPress: () {}),
+                                  Text(
+                                    "Live Atendance",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700),
                                   ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3 +
-                                            10,
-                                    child: CustomButton1(
-                                        btnName: "Check Out", onPress: () {}),
+                                  Text(
+                                    DateFormat("Hms").format(DateTime.now()),
+                                    style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xff426689)),
                                   ),
+                                  Text(
+                                    DateFormat("EEEE, d MMMM y")
+                                        .format(DateTime.now()),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff5D5D5D)),
+                                  ),
+                                  Divider(),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    "Office Hours",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff5D5D5D)),
+                                  ),
+                                  Text(
+                                    "08:00 AM - 05:00 PM",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    3 +
+                                                10,
+                                        child: CustomButton1(
+                                            btnName: "Check In",
+                                            onPress: () {}),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    3 +
+                                                10,
+                                        child: CustomButton1(
+                                            btnName: "Check Out",
+                                            onPress: () {}),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(),
                                 ],
-                              ),
-                              Divider(),
-                            ],
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(
