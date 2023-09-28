@@ -1,4 +1,3 @@
-import 'package:absensi_online/pages/landing_page/landing_page.dart';
 import 'package:absensi_online/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

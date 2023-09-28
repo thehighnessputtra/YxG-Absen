@@ -174,7 +174,10 @@ class _HomePageState extends State<HomePage> {
                                                 10,
                                         child: CustomButton1(
                                             btnName: "Check In",
-                                            onPress: () {}),
+                                            onPress: () {
+                                              navPushTransition(
+                                                  context, TestingPage());
+                                            }),
                                       ),
                                       SizedBox(
                                         width:

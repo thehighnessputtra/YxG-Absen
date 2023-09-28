@@ -1,5 +1,5 @@
 import 'package:absensi_online/pages/auth/login_page/login_page.dart';
-import 'package:absensi_online/pages/signup_page/sign_up_page.dart';
+import 'package:absensi_online/pages/auth/signup_page/sign_up_page.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
 import 'package:absensi_online/widgets/transition_widget.dart';
