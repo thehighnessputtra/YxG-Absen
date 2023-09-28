@@ -20,7 +20,7 @@ class FirebaseServices {
       icon: Icons.notifications_active,
     );
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(milliseconds: 500),
       () => navReplaceTransition(context, page),
     );
   }

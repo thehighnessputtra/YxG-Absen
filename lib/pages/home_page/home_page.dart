@@ -82,7 +82,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Spacer(),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  FirebaseServices(FirebaseAuth.instance)
+                                      .signOut(context);
+                                },
                                 icon: Icon(
                                   Icons.exit_to_app,
                                   color: Colors.white,
@@ -99,8 +102,8 @@ class _HomePageState extends State<HomePage> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
+                                spreadRadius: 2,
+                                blurRadius: 4,
                                 offset:
                                     Offset(0, 3), // changes position of shadow
                               ),
@@ -211,12 +214,29 @@ class _HomePageState extends State<HomePage> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    Text(
-                                      "08:00 - 05:00 PM",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
+                                    const SizedBox(
+                                      width: 15.0,
                                     ),
+                                    Text.rich(TextSpan(children: [
+                                      TextSpan(
+                                        text: "08:00",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: " - ",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "05:00",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ]))
                                   ],
                                 ),
                                 Divider()
