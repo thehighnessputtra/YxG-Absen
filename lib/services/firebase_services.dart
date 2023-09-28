@@ -3,6 +3,7 @@ import 'package:absensi_online/pages/home_page/home_page.dart';
 import 'package:absensi_online/services/sharedpreferences_services.dart';
 import 'package:absensi_online/widgets/custom_notification.dart';
 import 'package:absensi_online/widgets/transition_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -61,6 +62,39 @@ class FirebaseServices {
             isError: true);
       }
     }
+  }
+
+  Future<void> signUpEmail(
+      {required String email,
+      required String password,
+      required String noid,
+      required String name,
+      required BuildContext context}) async {
+    try {
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {postRegistToFirestore(email, name, noid)});
+
+      // ignore: use_build_context_synchronously
+      authRoute(context, message: "Sign up success!", page: HomePage());
+    } on FirebaseAuthException catch (e) {
+      customNotification(
+          message: "Failed to sign up",
+          isError: true,
+          tittle: "ERROR!",
+          context);
+    }
+  }
+
+  postRegistToFirestore(String email, String name, String noId) async {
+    var user = FirebaseAuth.instance.currentUser;
+    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    ref.doc(user!.email).set({
+      'email': email,
+      'nama': name,
+      'noId': noId,
+      'bidang': "bidang",
+    });
   }
 
   Future<void> signOut(BuildContext context) async {

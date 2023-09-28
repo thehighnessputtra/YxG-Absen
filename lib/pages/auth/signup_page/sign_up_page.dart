@@ -12,11 +12,13 @@
 //   }
 // }
 
+import 'package:absensi_online/services/firebase_services.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
 import 'package:absensi_online/widgets/custom_dialog.dart';
 import 'package:absensi_online/widgets/custom_notification.dart';
 import 'package:absensi_online/widgets/textformfield_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -82,8 +84,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       onPress: () {
                         customDialog(context,
                             title: "Information",
-                            confirmButton: true,
-                            yesPressed: () {},
+                            confirmButton: true, yesPressed: () {
+                          FirebaseServices(FirebaseAuth.instance).signUpEmail(
+                              email: _controllerEmail.text,
+                              password: _controllerPassword.text,
+                              noid: _controllerNoID.text,
+                              name: _controllerNama.text,
+                              context: context);
+                        },
                             content: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
