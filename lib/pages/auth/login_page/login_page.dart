@@ -1,4 +1,5 @@
 import 'package:absensi_online/pages/auth/signup_page/sign_up_page.dart';
+import 'package:absensi_online/pages/landing_page/landing_page.dart';
 import 'package:absensi_online/services/firebase_services.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
@@ -149,7 +150,7 @@ class LoginPage extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  navReplaceTransition(context, LandingPage());
                 },
                 icon: Icon(
                   Icons.arrow_back,
