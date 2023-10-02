@@ -16,12 +16,13 @@ class _SplashScreenState extends State<SplashScreen> {
     String? email = await pref.getEmail();
     Future.delayed(const Duration(seconds: 3), () {
       if (email != null) {
-        // print(email);
+        print("Email yang tersimpan : $email");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
+        print("Email tidak ");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LandingPage()),
