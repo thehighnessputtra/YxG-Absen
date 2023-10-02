@@ -69,11 +69,12 @@ class FirebaseServices {
       required String password,
       required String noid,
       required String name,
+      required String bidang,
       required BuildContext context}) async {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {postRegistToFirestore(email, name, noid)});
+          .then((value) => {postRegistToFirestore(email, name, noid, bidang)});
 
       // ignore: use_build_context_synchronously
       authRoute(context, message: "Sign up success!", page: HomePage());
@@ -86,15 +87,62 @@ class FirebaseServices {
     }
   }
 
-  postRegistToFirestore(String email, String name, String noId) async {
+  postRegistToFirestore(
+      String email, String name, String noId, String bidang) async {
     var user = FirebaseAuth.instance.currentUser;
     CollectionReference ref = FirebaseFirestore.instance.collection('users');
     ref.doc(user!.email).set({
       'email': email,
       'nama': name,
       'noId': noId,
-      'bidang': "bidang",
+      'bidang': bidang,
     });
+    CollectionReference ref2 = FirebaseFirestore.instance.collection('absen');
+    ref2.doc(user.email).set({
+      'date': DateTime.now(),
+      'email': email,
+      'nama': name,
+      'noId': noId,
+      'status': "kosong",
+      'checkIn': {
+        'dateCheckIn': [DateTime.now()],
+        'lat': ["lat"],
+        'long': ["long"],
+      },
+      'checkOut': {
+        'dateCheckOut': [DateTime.now()],
+        'lat': ["lat"],
+        'long': ["long"],
+      },
+    });
+  }
+
+  checkInToFirestore({required String email}) async {
+    var user = FirebaseAuth.instance.currentUser;
+    CollectionReference ref = FirebaseFirestore.instance.collection('absen');
+    ref.doc(user!.email).update(
+      {
+        'status': "checkIn",
+        'checkIn': {
+          'dateCheckIn': FieldValue.arrayUnion([DateTime.now()]),
+          'lat': FieldValue.arrayUnion(["latt"]),
+          'long': FieldValue.arrayUnion(["ltong"]),
+        },
+      },
+    );
+  }
+
+  checkOutToFirestore({required String email}) async {
+    var user = FirebaseAuth.instance.currentUser;
+    CollectionReference ref = FirebaseFirestore.instance.collection('absen');
+    ref.doc(user!.email).set({
+      'status': "checkOut",
+      'checkIn': {
+        'dateCheckIn': [DateTime.now()],
+        'lat': ["lat"],
+        'long': ["long"],
+      },
+    }, SetOptions(merge: true));
   }
 
   Future<void> signOut(BuildContext context) async {

@@ -3,11 +3,9 @@
 import 'dart:async';
 
 import 'package:absensi_online/services/firebase_services.dart';
-import 'package:absensi_online/test.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
-import 'package:absensi_online/widgets/custom_notification.dart';
-import 'package:absensi_online/widgets/transition_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,12 +19,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    getUsers();
+    super.initState();
+  }
+
+  String nama = "...";
+  String bidang = "...";
+  Future getUsers() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email!)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        setState(() {
+          nama = value.data()!['nama'];
+          bidang = value.data()!['bidang'];
+        });
+      }
+    });
+  }
+
+  Future getAbsen() async {
+    await FirebaseFirestore.instance
+        .collection('absen')
+        .doc(FirebaseAuth.instance.currentUser!.email!)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        setState(() {
+          nama = value.data()!['nama'];
+          bidang = value.data()!['bidang'];
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors,
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Stack(
@@ -35,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(right: 50),
                     height: MediaQuery.of(context).size.height / 2 - 50,
                     width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: colorBlue,
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
@@ -46,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                         color: colorDarkBlue,
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.elliptical(300, 300),
+                            bottomLeft: const Radius.elliptical(300, 300),
                             bottomRight: Radius.elliptical(
                                 MediaQuery.of(context).size.width * 2,
                                 MediaQuery.of(context).size.height))),
@@ -59,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Row(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 45,
                               height: 45,
                               child: CircleAvatar(
@@ -72,25 +108,25 @@ class _HomePageState extends State<HomePage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Jacob Hones",
+                                Text(nama,
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700)),
-                                Text("Jabatan",
+                                Text(bidang,
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Color(0xffF4F4F4),
                                         fontWeight: FontWeight.w400)),
                               ],
                             ),
-                            Spacer(),
+                            const Spacer(),
                             IconButton(
                                 onPressed: () {
                                   FirebaseServices(FirebaseAuth.instance)
                                       .signOut(context);
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.exit_to_app,
                                   color: Colors.white,
                                 ))
@@ -108,12 +144,12 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 2,
                                 blurRadius: 4,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
                               ),
                             ],
                           ),
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           height: 250,
                           width: double.infinity,
                           child: StreamBuilder(
@@ -121,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (context, snapshot) {
                               return Column(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Live Atendance",
                                     style: TextStyle(
                                         fontSize: 14,
@@ -129,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Text(
                                     DateFormat("Hms").format(DateTime.now()),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 32,
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xff426689)),
@@ -137,23 +173,23 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     DateFormat("EEEE, d MMMM y")
                                         .format(DateTime.now()),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: Color(0xff5D5D5D)),
                                   ),
-                                  Divider(),
+                                  const Divider(),
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Office Hours",
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff5D5D5D)),
                                   ),
-                                  Text(
+                                  const Text(
                                     "08:00 AM - 05:00 PM",
                                     style: TextStyle(
                                       fontSize: 20,
@@ -175,22 +211,33 @@ class _HomePageState extends State<HomePage> {
                                         child: CustomButton1(
                                             btnName: "Check In",
                                             onPress: () {
-                                              navPushTransition(
-                                                  context, TestingPage());
+                                              FirebaseServices(
+                                                      FirebaseAuth.instance)
+                                                  .checkInToFirestore(
+                                                email: FirebaseAuth.instance
+                                                    .currentUser!.email!,
+                                              );
                                             }),
                                       ),
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    3 +
-                                                10,
-                                        child: CustomButton1(
-                                            btnName: "Check Out",
-                                            onPress: () {}),
-                                      ),
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  3 +
+                                              10,
+                                          child: CustomButton1(
+                                              btnName: "Check Out",
+                                              onPress: () {
+                                                FirebaseServices(
+                                                        FirebaseAuth.instance)
+                                                    .checkOutToFirestore(
+                                                  email: FirebaseAuth.instance
+                                                      .currentUser!.email!,
+                                                );
+                                              })),
                                     ],
                                   ),
-                                  Divider(),
+                                  const Divider(),
                                 ],
                               );
                             },
@@ -201,11 +248,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.history_outlined),
+                            const Icon(Icons.history_outlined),
                             const SizedBox(
                               width: 5.0,
                             ),
-                            Text(
+                            const Text(
                               "Attendance History",
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 16),
@@ -216,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                           height: 15.0,
                         ),
                         ListView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
                           shrinkWrap: true,
                           itemCount: 6,
                           itemBuilder: (context, index) {
@@ -226,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Mon, 18 April 2023",
                                       style: TextStyle(
                                         fontSize: 16,
@@ -235,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                                     const SizedBox(
                                       width: 15.0,
                                     ),
-                                    Text.rich(TextSpan(children: [
+                                    const Text.rich(TextSpan(children: [
                                       TextSpan(
                                         text: "08:00",
                                         style: TextStyle(
@@ -257,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                                     ]))
                                   ],
                                 ),
-                                Divider()
+                                const Divider()
                               ],
                             );
                           },
