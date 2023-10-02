@@ -35,7 +35,9 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerNama = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
+  String bidang = "bidang";
   bool isClicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,23 +84,51 @@ class _SignUpPageState extends State<SignUpPage> {
                   CustomButton2(
                       btnName: "Sign Up",
                       onPress: () {
+                        if (RegExp(r'^001\d{4}')
+                            .hasMatch(_controllerNoID.text)) {
+                          setState(() {
+                            bidang = "Pemrograman";
+                          });
+                        } else if (RegExp(r'^002\d{4}')
+                            .hasMatch(_controllerNoID.text)) {
+                          setState(() {
+                            bidang = "UI/UX";
+                          });
+                        } else {
+                          setState(() {
+                            bidang = "-";
+                          });
+                        }
                         customDialog(context,
                             title: "Information",
                             confirmButton: true, yesPressed: () {
-                          FirebaseServices(FirebaseAuth.instance).signUpEmail(
-                              email: _controllerEmail.text,
-                              password: _controllerPassword.text,
-                              noid: _controllerNoID.text,
-                              name: _controllerNama.text,
-                              context: context);
+                          if (bidang == "-") {
+                            customDialog(context,
+                                title: "ERROR",
+                                content: SingleChildScrollView(
+                                  child: Center(
+                                      child: Text("Pastikan No. ID Sesuai")),
+                                ));
+                          } else {
+                            FirebaseServices(FirebaseAuth.instance).signUpEmail(
+                                email: _controllerEmail.text,
+                                password: _controllerPassword.text,
+                                noid: _controllerNoID.text,
+                                name: _controllerNama.text,
+                                bidang: bidang,
+                                context: context);
+                          }
                         },
-                            content: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("No. ID : ${_controllerNoID.text}"),
-                                Text("Email : ${_controllerEmail.text}"),
-                                Text("Nama : ${_controllerNama.text}"),
-                              ],
+                            content: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("No. ID : ${_controllerNoID.text}"),
+                                  Text("Email : ${_controllerEmail.text}"),
+                                  Text("Nama : ${_controllerNama.text}"),
+                                  Text("Bidang : $bidang"),
+                                ],
+                              ),
                             ));
                       })
                 ],
