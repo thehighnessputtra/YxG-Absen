@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:absensi_online/services/absen_services.dart';
 import 'package:absensi_online/services/firebase_services.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
@@ -211,12 +212,12 @@ class _HomePageState extends State<HomePage> {
                                         child: CustomButton1(
                                             btnName: "Check In",
                                             onPress: () {
-                                              FirebaseServices(
-                                                      FirebaseAuth.instance)
+                                              AbsenServices()
                                                   .checkInToFirestore(
-                                                email: FirebaseAuth.instance
-                                                    .currentUser!.email!,
-                                              );
+                                                      email: FirebaseAuth
+                                                          .instance
+                                                          .currentUser!
+                                                          .email!);
                                             }),
                                       ),
                                       SizedBox(
@@ -228,12 +229,12 @@ class _HomePageState extends State<HomePage> {
                                           child: CustomButton1(
                                               btnName: "Check Out",
                                               onPress: () {
-                                                FirebaseServices(
-                                                        FirebaseAuth.instance)
+                                                AbsenServices()
                                                     .checkOutToFirestore(
-                                                  email: FirebaseAuth.instance
-                                                      .currentUser!.email!,
-                                                );
+                                                        email: FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .email!);
                                               })),
                                     ],
                                   ),

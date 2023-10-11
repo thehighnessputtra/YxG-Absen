@@ -89,16 +89,15 @@ class FirebaseServices {
 
   postRegistToFirestore(
       String email, String name, String noId, String bidang) async {
-    var user = FirebaseAuth.instance.currentUser;
     CollectionReference ref = FirebaseFirestore.instance.collection('users');
-    ref.doc(user!.email).set({
+    ref.doc(email).set({
       'email': email,
       'nama': name,
       'noId': noId,
       'bidang': bidang,
     });
     CollectionReference ref2 = FirebaseFirestore.instance.collection('absen');
-    ref2.doc(user.email).set({
+    ref2.doc(email).set({
       'date': DateTime.now(),
       'email': email,
       'nama': name,
@@ -115,34 +114,6 @@ class FirebaseServices {
         'long': ["long"],
       },
     });
-  }
-
-  checkInToFirestore({required String email}) async {
-    var user = FirebaseAuth.instance.currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection('absen');
-    ref.doc(user!.email).update(
-      {
-        'status': "checkIn",
-        'checkIn': {
-          'dateCheckIn': FieldValue.arrayUnion([DateTime.now()]),
-          'lat': FieldValue.arrayUnion(["latt"]),
-          'long': FieldValue.arrayUnion(["ltong"]),
-        },
-      },
-    );
-  }
-
-  checkOutToFirestore({required String email}) async {
-    var user = FirebaseAuth.instance.currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection('absen');
-    ref.doc(user!.email).set({
-      'status': "checkOut",
-      'checkIn': {
-        'dateCheckIn': [DateTime.now()],
-        'lat': ["lat"],
-        'long': ["long"],
-      },
-    }, SetOptions(merge: true));
   }
 
   Future<void> signOut(BuildContext context) async {
