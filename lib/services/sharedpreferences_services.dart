@@ -5,19 +5,19 @@ class SharedPreferenceServices {
 
   Future<String?> getEmail() async {
     final pref = await SharedPreferences.getInstance();
-    print("MSG = Success get email");
+    print("MSG = Get email");
     return pref.getString(keyEmail);
   }
 
   Future<bool> saveEmail(String email) async {
     final pref = await SharedPreferences.getInstance();
-    print("MSG = Success ssave email");
+    print("MSG = Save email");
     return pref.setString(keyEmail, email);
   }
 
   Future<bool> deleteEmail() async {
     final pref = await SharedPreferences.getInstance();
-    print("MSG = Success delete email");
+    print("MSG = Delete email");
     return pref.remove(keyEmail);
   }
 }

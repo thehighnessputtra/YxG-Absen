@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
-        print("Email tidak ");
+        print("Email tidak tersimpan");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LandingPage()),
