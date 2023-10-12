@@ -43,8 +43,8 @@ class AbsenServices {
     Map? data = docSnapshot.data() as Map?;
 
     // Initialize arrays if they don't exist or are null
-    List datecheckOut = data?['checkOut']['datecheckOut'] != null
-        ? List.from(data!['checkOut']['datecheckOut'])
+    List dateCheckOut = data?['checkOut']['dateCheckOut'] != null
+        ? List.from(data!['checkOut']['dateCheckOut'])
         : [];
     List lat = data?['checkOut']['lat'] != null
         ? List.from(data!['checkOut']['lat'])
@@ -54,7 +54,7 @@ class AbsenServices {
         : [];
 
     // Add the new values to the arrays
-    datecheckOut.add(DateTime.now());
+    dateCheckOut.add(DateTime.now());
     lat.add("latt");
     long.add("long");
 
@@ -62,7 +62,7 @@ class AbsenServices {
     await ref.doc(email).set({
       'status': "checkOut",
       'checkOut': {
-        'datecheckOut': datecheckOut,
+        'dateCheckOut': dateCheckOut,
         'lat': lat,
         'long': long,
       },
