@@ -4,8 +4,10 @@ import 'dart:async';
 
 import 'package:absensi_online/services/absen_services.dart';
 import 'package:absensi_online/services/firebase_services.dart';
+import 'package:absensi_online/test.dart';
 import 'package:absensi_online/utils/constant.dart';
 import 'package:absensi_online/widgets/custom_button.dart';
+import 'package:absensi_online/widgets/transition_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -263,50 +265,105 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                        ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          shrinkWrap: true,
-                          itemCount: 6,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                        ElevatedButton(
+                            onPressed: () =>
+                                navPushTransition(context, TestingPage()),
+                            child: Text("A")),
+                        StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('absen')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            return ListView.builder(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                final items = snapshot.data!.docs[index];
+                                // checkIn
+                                Map<String, dynamic> checkIn = items["checkIn"];
+                                List<Timestamp> dateCheckInList =
+                                    List<Timestamp>.from(
+                                        checkIn["dateCheckIn"]);
+                                List<String> latCheckInList =
+                                    List<String>.from(checkIn["lat"]);
+                                List<String> longCheckInList =
+                                    List<String>.from(checkIn["long"]);
+                                // checkOut
+                                Map<String, dynamic> checkOut =
+                                    items["checkOut"];
+                                List<Timestamp> dateCheckOutList =
+                                    List<Timestamp>.from(
+                                        checkOut["dateCheckOut"]);
+                                List<String> latCheckOutList =
+                                    List<String>.from(checkOut["lat"]);
+                                List<String> longCheckOutList =
+                                    List<String>.from(checkOut["long"]);
+
+                                return Column(
                                   children: [
-                                    const Text(
-                                      "Mon, 18 April 2023",
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                    for (int i = 0;
+                                        i < dateCheckInList.length;
+                                        i++)
+                                      Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                DateFormat("E, d MMM yyyy")
+                                                    .format(DateTime.parse(
+                                                        dateCheckInList[i]
+                                                            .toDate()
+                                                            .toString()))
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 15.0,
+                                              ),
+                                              Text.rich(TextSpan(children: [
+                                                TextSpan(
+                                                  text: DateFormat("Hm")
+                                                      .format(DateTime.parse(
+                                                          dateCheckInList[i]
+                                                              .toDate()
+                                                              .toString()))
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: " - ",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: DateFormat("Hm")
+                                                      .format(DateTime.parse(
+                                                          dateCheckOutList[i]
+                                                              .toDate()
+                                                              .toString()))
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ]))
+                                            ],
+                                          ),
+                                          Divider()
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15.0,
-                                    ),
-                                    const Text.rich(TextSpan(children: [
-                                      TextSpan(
-                                        text: "08:00",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: " - ",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: "05:00",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ]))
                                   ],
-                                ),
-                                const Divider()
-                              ],
+                                );
+                              },
                             );
                           },
                         )
