@@ -281,8 +281,10 @@ class _HomePageState extends State<HomePage> {
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 final items = snapshot.data!.docs[index];
-                                // checkIn
                                 Map<String, dynamic> checkIn = items["checkIn"];
+                                Map<String, dynamic> checkOut =
+                                    items["checkOut"];
+                                // checkIn
                                 List<Timestamp> dateCheckInList =
                                     List<Timestamp>.from(
                                         checkIn["dateCheckIn"]);
@@ -290,9 +292,8 @@ class _HomePageState extends State<HomePage> {
                                     List<String>.from(checkIn["lat"]);
                                 List<String> longCheckInList =
                                     List<String>.from(checkIn["long"]);
+
                                 // checkOut
-                                Map<String, dynamic> checkOut =
-                                    items["checkOut"];
                                 List<Timestamp> dateCheckOutList =
                                     List<Timestamp>.from(
                                         checkOut["dateCheckOut"]);
@@ -301,11 +302,13 @@ class _HomePageState extends State<HomePage> {
                                 List<String> longCheckOutList =
                                     List<String>.from(checkOut["long"]);
 
+                                int maxLength = dateCheckInList.length;
+                                if (dateCheckOutList.length < maxLength) {
+                                  maxLength = dateCheckOutList.length;
+                                }
                                 return Column(
                                   children: [
-                                    for (int i = 0;
-                                        i < dateCheckInList.length;
-                                        i++)
+                                    for (int i = 0; i < maxLength; i++)
                                       Column(
                                         children: [
                                           Row(
