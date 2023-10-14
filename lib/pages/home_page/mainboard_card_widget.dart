@@ -82,9 +82,7 @@ class MainboardCard extends StatelessWidget {
                                   email: firebaseAuth.currentUser!.email!);
                             } else {
                               customNotification(context,
-                                  message:
-                                      "Sudah Check In, tidak dapat check in lagi!",
-                                  isError: true);
+                                  message: "check in error!", isError: true);
                             }
                           }),
                     ),
@@ -103,9 +101,7 @@ class MainboardCard extends StatelessWidget {
                                     email: firebaseAuth.currentUser!.email!);
                               } else {
                                 customNotification(context,
-                                    message:
-                                        "Sudah Check out, tidak dapat check out lagi!",
-                                    isError: true);
+                                    message: "check out error!", isError: true);
                               }
                             })),
                   ],
