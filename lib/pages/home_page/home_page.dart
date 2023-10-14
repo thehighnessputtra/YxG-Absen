@@ -77,29 +77,23 @@ class _HomePageState extends State<HomePage> {
                           height: 20.0,
                         ),
                         Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 4,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          padding: const EdgeInsets.all(20),
-                          height: 250,
-                          width: double.infinity,
-                          child: StreamBuilder(
-                            stream: Stream.periodic(const Duration(seconds: 1)),
-                            builder: (context, snapshot) {
-                              return const MainboardCard();
-                            },
-                          ),
-                        ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(20),
+                            height: 250,
+                            width: double.infinity,
+                            child: MainboardCard()),
                         const SizedBox(
                           height: 10.0,
                         ),
