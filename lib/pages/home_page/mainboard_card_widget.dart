@@ -16,7 +16,7 @@ class MainboardCard extends StatelessWidget {
         return Column(
           children: [
             const Text(
-              "Live Atendance",
+              "Live Attendance",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
             Text(
