@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AttendanceHistory extends StatelessWidget {
-  String email = "";
   List dateCheckInList = [];
   List dateCheckOutList = [];
   AttendanceHistory(
-      {required this.email,
-      required this.dateCheckOutList,
+      {required this.dateCheckOutList,
       required this.dateCheckInList,
       super.key});
 
@@ -28,56 +26,54 @@ class AttendanceHistory extends StatelessWidget {
       return Column(
         children: [
           for (int i = 0; i < maxLength; i++)
-            email == firebaseAuth.currentUser!.email!
-                ? Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            DateFormat("E, d MMM yyyy")
-                                .format(DateTime.parse(
-                                    dateCheckInList[i].toDate().toString()))
-                                .toString(),
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Text.rich(TextSpan(children: [
-                            TextSpan(
-                              text: DateFormat("Hm")
-                                  .format(DateTime.parse(
-                                      dateCheckInList[i].toDate().toString()))
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            TextSpan(
-                              text: " - ",
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            TextSpan(
-                              text: DateFormat("Hm")
-                                  .format(DateTime.parse(
-                                      dateCheckOutList[i].toDate().toString()))
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ]))
-                        ],
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      DateFormat("E, d MMM yyyy")
+                          .format(DateTime.parse(
+                              dateCheckInList[i].toDate().toString()))
+                          .toString(),
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
-                      Divider()
-                    ],
-                  )
-                : SizedBox(),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                    Text.rich(TextSpan(children: [
+                      TextSpan(
+                        text: DateFormat("Hm")
+                            .format(DateTime.parse(
+                                dateCheckInList[i].toDate().toString()))
+                            .toString(),
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " - ",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextSpan(
+                        text: DateFormat("Hm")
+                            .format(DateTime.parse(
+                                dateCheckOutList[i].toDate().toString()))
+                            .toString(),
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ]))
+                  ],
+                ),
+                Divider()
+              ],
+            )
         ],
       );
     }
