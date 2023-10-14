@@ -93,7 +93,9 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.all(20),
                             height: 250,
                             width: double.infinity,
-                            child: MainboardCard()),
+                            child: MainboardCard(
+                              email: firebaseAuth.currentUser!.email!,
+                            )),
                         const SizedBox(
                           height: 10.0,
                         ),
@@ -114,51 +116,33 @@ class _HomePageState extends State<HomePage> {
                           height: 15.0,
                         ),
                         StreamBuilder(
-                          stream:
-                              firebaseFirestore.collection('absen').snapshots(),
+                          stream: firebaseFirestore
+                              .collection('absen')
+                              .doc(firebaseAuth.currentUser!.email)
+                              .snapshots(),
                           builder: (context, snapshot) {
-                            return ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                final items = snapshot.data!.docs[index];
-                                String absenEmail = items["email"];
-                                Map<String, dynamic> checkIn = items["checkIn"];
-                                Map<String, dynamic> checkOut =
-                                    items["checkOut"];
-                                // checkIn
-                                List<Timestamp> dateCheckInList =
-                                    List<Timestamp>.from(
-                                        checkIn["dateCheckIn"]);
-                                List<String> latCheckInList =
-                                    List<String>.from(checkIn["lat"]);
-                                List<String> longCheckInList =
-                                    List<String>.from(checkIn["long"]);
+                            final items = snapshot.data!;
+                            Map<String, dynamic> checkIn = items["checkIn"];
+                            Map<String, dynamic> checkOut = items["checkOut"];
+                            // checkIn
+                            List<Timestamp> dateCheckInList =
+                                List<Timestamp>.from(checkIn["dateCheckIn"]);
+                            List<String> latCheckInList =
+                                List<String>.from(checkIn["lat"]);
+                            List<String> longCheckInList =
+                                List<String>.from(checkIn["long"]);
 
-                                // checkOut
-                                List<Timestamp> dateCheckOutList =
-                                    List<Timestamp>.from(
-                                        checkOut["dateCheckOut"]);
-                                List<String> latCheckOutList =
-                                    List<String>.from(checkOut["lat"]);
-                                List<String> longCheckOutList =
-                                    List<String>.from(checkOut["long"]);
+                            // checkOut
+                            List<Timestamp> dateCheckOutList =
+                                List<Timestamp>.from(checkOut["dateCheckOut"]);
+                            List<String> latCheckOutList =
+                                List<String>.from(checkOut["lat"]);
+                            List<String> longCheckOutList =
+                                List<String>.from(checkOut["long"]);
 
-                                int maxLength = dateCheckInList.length;
-                                if (dateCheckOutList.length < maxLength) {
-                                  maxLength = dateCheckOutList.length;
-                                }
-                                return
-                                    // Text(absenEmail);
-                                    AttendanceHistory(
-                                        email: absenEmail,
-                                        dateCheckInList: dateCheckInList,
-                                        dateCheckOutList: dateCheckOutList);
-                              },
-                            );
+                            return AttendanceHistory(
+                                dateCheckOutList: dateCheckOutList,
+                                dateCheckInList: dateCheckInList);
                           },
                         )
                       ],
