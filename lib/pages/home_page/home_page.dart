@@ -2,6 +2,10 @@
 
 import 'dart:async';
 
+import 'package:absensi_online/pages/home_page/attendance_history_widget.dart';
+import 'package:absensi_online/widgets/background_widget.dart';
+import 'package:absensi_online/pages/home_page/mainboard_card_widget.dart';
+import 'package:absensi_online/pages/home_page/top_bar_widget.dart';
 import 'package:absensi_online/services/absen_services.dart';
 import 'package:absensi_online/services/firebase_services.dart';
 import 'package:absensi_online/test.dart';
@@ -27,27 +31,15 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
   String nama = "...";
   String bidang = "...";
   Future getUsers() async {
-    await FirebaseFirestore.instance
+    await firebaseFirestore
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
-        .get()
-        .then((value) {
-      if (value.exists) {
-        setState(() {
-          nama = value.data()!['nama'];
-          bidang = value.data()!['bidang'];
-        });
-      }
-    });
-  }
-
-  Future getAbsen() async {
-    await FirebaseFirestore.instance
-        .collection('absen')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
+        .doc(firebaseAuth.currentUser!.email!)
         .get()
         .then((value) {
       if (value.exists) {
@@ -70,70 +62,16 @@ class _HomePageState extends State<HomePage> {
             children: [
               Stack(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.only(right: 50),
-                    height: MediaQuery.of(context).size.height / 2 - 50,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                        color: colorBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 50),
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: colorDarkBlue,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: const Radius.elliptical(300, 300),
-                            bottomRight: Radius.elliptical(
-                                MediaQuery.of(context).size.width * 2,
-                                MediaQuery.of(context).size.height))),
-                  ),
+                  const MyBackgroundWidget(),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 45,
-                              height: 45,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.red,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(nama,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700)),
-                                Text(bidang,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xffF4F4F4),
-                                        fontWeight: FontWeight.w400)),
-                              ],
-                            ),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {
-                                  FirebaseServices(FirebaseAuth.instance)
-                                      .signOut(context);
-                                },
-                                icon: const Icon(
-                                  Icons.exit_to_app,
-                                  color: Colors.white,
-                                ))
-                          ],
+                        TopBarCard(
+                          nama: nama,
+                          bidang: bidang,
                         ),
                         const SizedBox(
                           height: 20.0,
@@ -158,91 +96,7 @@ class _HomePageState extends State<HomePage> {
                           child: StreamBuilder(
                             stream: Stream.periodic(const Duration(seconds: 1)),
                             builder: (context, snapshot) {
-                              return Column(
-                                children: [
-                                  const Text(
-                                    "Live Atendance",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    DateFormat("Hms").format(DateTime.now()),
-                                    style: const TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.w700,
-                                        color: Color(0xff426689)),
-                                  ),
-                                  Text(
-                                    DateFormat("EEEE, d MMMM y")
-                                        .format(DateTime.now()),
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xff5D5D5D)),
-                                  ),
-                                  const Divider(),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  const Text(
-                                    "Office Hours",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xff5D5D5D)),
-                                  ),
-                                  const Text(
-                                    "08:00 AM - 05:00 PM",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    3 +
-                                                10,
-                                        child: CustomButton1(
-                                            btnName: "Check In",
-                                            onPress: () {
-                                              AbsenServices()
-                                                  .checkInToFirestore(
-                                                      email: FirebaseAuth
-                                                          .instance
-                                                          .currentUser!
-                                                          .email!);
-                                            }),
-                                      ),
-                                      SizedBox(
-                                          width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  3 +
-                                              10,
-                                          child: CustomButton1(
-                                              btnName: "Check Out",
-                                              onPress: () {
-                                                AbsenServices()
-                                                    .checkOutToFirestore(
-                                                        email: FirebaseAuth
-                                                            .instance
-                                                            .currentUser!
-                                                            .email!);
-                                              })),
-                                    ],
-                                  ),
-                                  const Divider(),
-                                ],
-                              );
+                              return const MainboardCard();
                             },
                           ),
                         ),
@@ -250,12 +104,12 @@ class _HomePageState extends State<HomePage> {
                           height: 10.0,
                         ),
                         Row(
-                          children: [
-                            const Icon(Icons.history_outlined),
-                            const SizedBox(
+                          children: const [
+                            Icon(Icons.history_outlined),
+                            SizedBox(
                               width: 5.0,
                             ),
-                            const Text(
+                            Text(
                               "Attendance History",
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 16),
@@ -265,22 +119,19 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 15.0,
                         ),
-                        ElevatedButton(
-                            onPressed: () =>
-                                navPushTransition(context, TestingPage()),
-                            child: Text("A")),
                         StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('absen')
-                              .snapshots(),
+                          stream:
+                              firebaseFirestore.collection('absen').snapshots(),
                           builder: (context, snapshot) {
                             return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 5),
                               shrinkWrap: true,
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 final items = snapshot.data!.docs[index];
+                                String absenEmail = items["email"];
                                 Map<String, dynamic> checkIn = items["checkIn"];
                                 Map<String, dynamic> checkOut =
                                     items["checkOut"];
@@ -306,66 +157,12 @@ class _HomePageState extends State<HomePage> {
                                 if (dateCheckOutList.length < maxLength) {
                                   maxLength = dateCheckOutList.length;
                                 }
-                                return Column(
-                                  children: [
-                                    for (int i = 0; i < maxLength; i++)
-                                      Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                DateFormat("E, d MMM yyyy")
-                                                    .format(DateTime.parse(
-                                                        dateCheckInList[i]
-                                                            .toDate()
-                                                            .toString()))
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 15.0,
-                                              ),
-                                              Text.rich(TextSpan(children: [
-                                                TextSpan(
-                                                  text: DateFormat("Hm")
-                                                      .format(DateTime.parse(
-                                                          dateCheckInList[i]
-                                                              .toDate()
-                                                              .toString()))
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: " - ",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: DateFormat("Hm")
-                                                      .format(DateTime.parse(
-                                                          dateCheckOutList[i]
-                                                              .toDate()
-                                                              .toString()))
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ]))
-                                            ],
-                                          ),
-                                          Divider()
-                                        ],
-                                      ),
-                                  ],
-                                );
+                                return
+                                    // Text(absenEmail);
+                                    AttendanceHistory(
+                                        email: absenEmail,
+                                        dateCheckInList: dateCheckInList,
+                                        dateCheckOutList: dateCheckOutList);
                               },
                             );
                           },
