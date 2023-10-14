@@ -4,16 +4,21 @@ import 'package:absensi_online/utils/constant.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton1 extends StatelessWidget {
-  CustomButton1({required this.btnName, required this.onPress, super.key});
+  CustomButton1(
+      {this.btnColor = colorBlue,
+      required this.btnName,
+      required this.onPress,
+      super.key});
   VoidCallback onPress;
   String btnName;
+  Color btnColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             elevation: 0,
-            backgroundColor: colorBlue,
+            backgroundColor: btnColor,
             shape: const RoundedRectangleBorder(
               side: BorderSide(color: colorLightBlue, width: 1),
               borderRadius: BorderRadius.all(Radius.circular(8)),
