@@ -116,35 +116,50 @@ class _HomePageState extends State<HomePage> {
                           height: 15.0,
                         ),
                         StreamBuilder(
-                          stream: firebaseFirestore
-                              .collection('absen')
-                              .doc(firebaseAuth.currentUser!.email)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            final items = snapshot.data!;
-                            Map<String, dynamic> checkIn = items["checkIn"];
-                            Map<String, dynamic> checkOut = items["checkOut"];
-                            // checkIn
-                            List<Timestamp> dateCheckInList =
-                                List<Timestamp>.from(checkIn["dateCheckIn"]);
-                            List<String> latCheckInList =
-                                List<String>.from(checkIn["lat"]);
-                            List<String> longCheckInList =
-                                List<String>.from(checkIn["long"]);
+                            stream: firebaseFirestore
+                                .collection('absen')
+                                .doc(firebaseAuth.currentUser!.email)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child:
+                                        CircularProgressIndicator()); // Handle loading state
+                              } else if (snapshot.hasError) {
+                                return const SizedBox();
+                              } else if (snapshot.hasData ||
+                                  snapshot.data == null) {
+                                final items = snapshot.data!;
 
-                            // checkOut
-                            List<Timestamp> dateCheckOutList =
-                                List<Timestamp>.from(checkOut["dateCheckOut"]);
-                            List<String> latCheckOutList =
-                                List<String>.from(checkOut["lat"]);
-                            List<String> longCheckOutList =
-                                List<String>.from(checkOut["long"]);
+                                Map<String, dynamic> checkIn = items["checkIn"];
+                                Map<String, dynamic> checkOut =
+                                    items["checkOut"];
+                                // checkIn
+                                List<Timestamp> dateCheckInList =
+                                    List<Timestamp>.from(
+                                        checkIn["dateCheckIn"]);
+                                List<String> latCheckInList =
+                                    List<String>.from(checkIn["lat"]);
+                                List<String> longCheckInList =
+                                    List<String>.from(checkIn["long"]);
 
-                            return AttendanceHistory(
-                                dateCheckOutList: dateCheckOutList,
-                                dateCheckInList: dateCheckInList);
-                          },
-                        )
+                                // checkOut
+                                List<Timestamp> dateCheckOutList =
+                                    List<Timestamp>.from(
+                                        checkOut["dateCheckOut"]);
+                                List<String> latCheckOutList =
+                                    List<String>.from(checkOut["lat"]);
+                                List<String> longCheckOutList =
+                                    List<String>.from(checkOut["long"]);
+
+                                return AttendanceHistory(
+                                    dateCheckOutList: dateCheckOutList,
+                                    dateCheckInList: dateCheckInList);
+                              } else {
+                                return const SizedBox();
+                              }
+                            })
                       ],
                     ),
                   ),
